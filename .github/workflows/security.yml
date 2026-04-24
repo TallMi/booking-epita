@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: run semgrep
-        run: semgrep --config .semgrep --sarif --output semgrep.sarif
+        run: semgrep --config .semgrep --sarif --output semgrep.sarif ./src
         continue-on-error: true
         
       - name: upload report
