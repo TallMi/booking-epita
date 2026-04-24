@@ -1,6 +1,7 @@
 name: security
+
 on:
-  workflow_dispatch:
+  workflow_dispatch: 
 
 permissions:
   actions: read
@@ -11,18 +12,19 @@ jobs:
   dependencies-analysis:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: run osv-scanner
-        uses: google/osv-scanner-action/osv-scanner-action@v1.9.2
+        uses: google/osv-scanner-action/osv-scanner-action@daa2c68f50d845057895a9c300e42478481c1d26
         with:
           scan-args: |-
             --format sarif
             --output DependenciesAnalysisFull.sarif
             ./
         continue-on-error: true
-        
-      - name: upload report
+
+      - name: Upload OSV report
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: DependenciesAnalysisFull.sarif
@@ -30,15 +32,15 @@ jobs:
   source-code-analysis:
     runs-on: ubuntu-latest
     container:
-      image: returntocorp/semgrep
+      image: returntocorp/semgrep:latest
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: run semgrep
-        run: semgrep --config .semgrep --sarif --output semgrep.sarif ./src
-        continue-on-error: true
-        
-      - name: upload report
+        run: semgrep scan --config=auto --sarif --output=semgrep.sarif
+
+      - name: Upload Semgrep report
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: semgrep.sarif
