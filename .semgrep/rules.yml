@@ -1,0 +1,7 @@
+rules:
+  - id: rule
+    patterns:
+      - pattern: print(...)
+    message: "Found a print statement"
+    languages: [python]
+    severity: WARNING
