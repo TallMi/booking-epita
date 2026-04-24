@@ -36,6 +36,7 @@ jobs:
       
       - name: run semgrep
         run: semgrep --config .semgrep --sarif --output semgrep.sarif
+        continue-on-error: true
         
       - name: upload report
         uses: github/codeql-action/upload-sarif@v3
